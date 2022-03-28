@@ -1,6 +1,7 @@
 import "./App.css";
 import "react-dropzone-uploader/dist/styles.css";
 import Dropzone from "react-dropzone-uploader";
+import Classifier from "./components/classifier";
 
 const App = () => {
   // specify upload params and url for your files
@@ -26,7 +27,8 @@ const App = () => {
         onChangeStatus={handleChangeStatus}
         onSubmit={handleSubmit}
         accept="image/*,audio/*,video/*"
-      />
+      />      
+      <Classifier />
     </div>
   );
 };
