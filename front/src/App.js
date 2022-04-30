@@ -2,11 +2,13 @@ import "./App.css";
 import React, { useState } from "react";
 
 import "react-dropzone-uploader/dist/styles.css";
-import Dropzone from "react-dropzone-uploader";
+// import Dropzone from "react-dropzone-uploader";
 import Classifier from "./components/classifier";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const App = () => {
   const [loadedImage, setLoadedImage] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const [displayImage, setDisplayImage] = useState();
   const [classifiedImage, setClassifiedImage] = useState("");
 
@@ -34,7 +36,7 @@ const App = () => {
   };
   const classify = async (e) => {
     setClassifiedImage("");
-
+    setIsLoading((state) => !state);
     e.preventDefault();
     // we sent post request to backend
     if (!loadedImage) {
@@ -59,6 +61,7 @@ const App = () => {
       // show user the class
       const jsonRes = await classifiedImage.json();
       setClassifiedImage(jsonRes.result);
+      setIsLoading((state) => !state);
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +84,10 @@ const App = () => {
           </div>
         </form>
         <Classifier classifiedImage={classifiedImage} image={displayImage} />
-        <button onClick={classify}>Classify</button>
+        {isLoading && <CircularProgress />}
+        <button disabled={isLoading} onClick={classify}>
+          Classify
+        </button>
       </div>
     </div>
   );
