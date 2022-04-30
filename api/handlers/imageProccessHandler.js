@@ -1,9 +1,11 @@
 export const runImageInModel = async (image) => {
+  // read image here and give the model
   // run model and wait for model to finish
   // return result
   console.log("in handler");
   //  this is to resemble a model running, running 1 second
   await delay(1000);
+
   return "dog";
 };
 
