@@ -34,7 +34,7 @@ const App = () => {
     // send to backend
     try {
       const classifiedImage = await fetch(
-        `http://localhost:3500/api/predict-leaves-or-thorns`,
+        `https://coin-classifier.herokuapp.com/api/predict-leaves-or-thorns`,
         requestOptions
       );
       // wait for response
