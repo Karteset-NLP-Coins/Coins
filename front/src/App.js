@@ -54,12 +54,13 @@ const App = () => {
     // send to backend
     try {
       const classifiedImage = await fetch(
-        `http://localhost:3500/api`,
+        `http://localhost:3500/api/predict-leaves-or-thorns`,
         requestOptions
       );
       // wait for response
       // show user the class
       const jsonRes = await classifiedImage.json();
+      console.log(jsonRes.result);
       setClassifiedImage(jsonRes.result);
       setIsLoading((state) => !state);
     } catch (error) {
