@@ -2,33 +2,14 @@ import "./App.css";
 import React, { useState } from "react";
 
 import "react-dropzone-uploader/dist/styles.css";
-// import Dropzone from "react-dropzone-uploader";
 import Classifier from "./components/classifier";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const App = () => {
-  const [loadedImage, setLoadedImage] = useState();
+  const [loadedImage, setLoadedImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [displayImage, setDisplayImage] = useState();
+  const [displayImage, setDisplayImage] = useState(null);
   const [classifiedImage, setClassifiedImage] = useState("");
-
-  // specify upload params and url for your files
-  // const getUploadParams = ({ meta }) => {
-  //   return { url: "https://httpbin.org/post" };
-  // };
-
-  // called every time a file's `status` changes
-  // const handleChangeStatus = ({ meta, file }, status) => {
-  //   /// here we load the loaded image
-  //   setLoadedImage(file);
-  //   console.log(status, meta, file);
-  // };
-
-  // receives array of files that are done uploading when submit button is clicked
-  // const handleSubmit = (files, allFiles) => {
-  //   console.log(files.map((f) => f.meta));
-  //   allFiles.forEach((f) => f.remove());
-  // };
 
   const handleInputChange = (event) => {
     setLoadedImage(event.target.files[0]);
@@ -44,12 +25,11 @@ const App = () => {
       return;
     }
     const formData = new FormData();
-    formData.append("file", loadedImage);
+    formData.append("image", loadedImage);
     const requestOptions = {
       method: "POST",
       body: formData,
     };
-
     // get file uploaded
     // send to backend
     try {
@@ -60,23 +40,16 @@ const App = () => {
       // wait for response
       // show user the class
       const jsonRes = await classifiedImage.json();
-      console.log(jsonRes.result);
       setClassifiedImage(jsonRes.result);
-      setIsLoading((state) => !state);
     } catch (error) {
+      setClassifiedImage("Failed");
       console.log(error);
     }
+    setIsLoading((state) => !state);
   };
 
   return (
     <div className="App">
-      {/* <Dropzone
-        getUploadParams={getUploadParams}
-        onChangeStatus={handleChangeStatus}
-        onSubmit={handleSubmit}
-        accept="image/*,audio/*,video/*"
-      /> */}
-
       <div className="container">
         <form>
           <div className="input-group">
@@ -86,7 +59,7 @@ const App = () => {
         </form>
         <Classifier classifiedImage={classifiedImage} image={displayImage} />
         {isLoading && <CircularProgress />}
-        <button disabled={isLoading} onClick={classify}>
+        <button disabled={isLoading || !displayImage} onClick={classify}>
           Classify
         </button>
       </div>
